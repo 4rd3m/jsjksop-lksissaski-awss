@@ -1067,9 +1067,9 @@ local Library do
             Items["Watermark"] = Instances:Create("Frame", {
                 Parent = Library.Holder.Instance,
                 BorderColor3 = FromRGB(0, 0, 0),
-                AnchorPoint = Vector2New(0.5, 0),
+                AnchorPoint = Vector2New(0, 0),
                 Name = "\0",
-                Position = UDim2New(0.5, 0, 0, 20),
+                Position = UDim2New(0, 140, 0, 10),
                 Size = UDim2New(0, 0, 0, 25),
                 BorderSizePixel = 2,
                 AutomaticSize = Enum.AutomaticSize.X,
@@ -1146,6 +1146,12 @@ local Library do
 
         function Watermark:SetVisibility(Bool)
             Items["Watermark"].Instance.Visible = Bool
+        end
+
+        function Watermark:SetText(String)
+            if Items["Text"] then
+                Items["Text"].Instance.Text = String
+            end
         end
 
         return Watermark
@@ -1493,7 +1499,7 @@ local Library do
                     BackgroundTransparency = 1,
                     Size = UDim2New(1, 0, 1, 0),
                     Position = UDim2New(0, 0, 0, 0),
-                    Image = "rbxassetid://5346850172",
+                    Image = "rbxassetid://71222452396199",
                     ImageTransparency = 0.8,
                     ScaleType = Enum.ScaleType.Tile,
                     TileSize = UDim2New(0, 256, 0, 256),
@@ -1704,6 +1710,18 @@ local Library do
                     AutomaticSize = Enum.AutomaticSize.Y,
                     BackgroundColor3 = FromRGB(19, 19, 19)
                 })  Items["Section"]:AddToTheme({BackgroundColor3 = "Section Background", BorderColor3 = "Outline"})
+
+                Items["Section_Texture"] = Instances:Create("ImageLabel", {
+                    Parent = Items["Section"].Instance,
+                    BackgroundTransparency = 1,
+                    Size = UDim2New(1, 0, 1, 0),
+                    Position = UDim2New(0, 0, 0, 0),
+                    Image = "rbxassetid://71222452396199",
+                    ImageTransparency = 0.8,
+                    ScaleType = Enum.ScaleType.Tile,
+                    TileSize = UDim2New(0, 256, 0, 256),
+                    ZIndex = 0
+                })
 
                 Instances:Create("UIPadding", {
                     Parent = Items["Section"].Instance,
@@ -3492,18 +3510,28 @@ local Library do
                 FontFace = Library.Font,
                 TextColor3 = FromRGB(180, 180, 180),
                 BorderColor3 = FromRGB(0, 0, 0),
-                Text = "[-]",
+                Text = " - ",
                 AutomaticSize = Enum.AutomaticSize.X,
                 Name = "\0",
                 AutoButtonColor = false,
-                AnchorPoint = Vector2New(1, 0),
-                Size = UDim2New(0, 0, 1, 0),
-                BackgroundTransparency = 1,
-                Position = UDim2New(1, 0, 0, 0),
-                BorderSizePixel = 0,
+                AnchorPoint = Vector2New(1, 0.5),
+                Size = UDim2New(0, 0, 0, 18),
+                BackgroundTransparency = 0,
+                Position = UDim2New(1, -2, 0.5, 0),
+                BorderSizePixel = 1,
                 TextSize = 12,
-                BackgroundColor3 = FromRGB(255, 255, 255)
-            })  Items["KeyButton"]:AddToTheme({TextColor3 = "Text"})
+                BackgroundColor3 = FromRGB(35, 35, 45)
+            })  Items["KeyButton"]:AddToTheme({TextColor3 = "Text", BackgroundColor3 = "Section Background", BorderColor3 = "Outline"})
+            
+            Instances:Create("UICorner", {
+                Parent = Items["KeyButton"].Instance,
+                CornerRadius = UDimNew(0, 4)
+            })
+            Instances:Create("UIPadding", {
+                Parent = Items["KeyButton"].Instance,
+                PaddingLeft = UDimNew(0, 6),
+                PaddingRight = UDimNew(0, 6)
+            })
 
             if Data.Tooltip then 
                 Items["KeyButton"]:Tooltip(Data.Tooltip)
