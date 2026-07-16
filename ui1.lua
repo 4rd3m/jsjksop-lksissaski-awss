@@ -1,5 +1,6 @@
 --[[
     Made by 4rd3m
+    
 
     Assign different flags to each element to prevent from configs overriding eachother
     Example script is at the bottom
@@ -669,6 +670,27 @@ local Library do
         end
     end
 
+    function Library:SetGlassEnabled(Enabled)
+        local Holder = Library.Holder
+        if Holder then
+            local trans = Enabled and 0.25 or 0
+            for _, obj in ipairs(Holder.Instance:GetDescendants()) do
+                if obj:IsA("GuiObject") and obj.Name ~= "Window_Texture" and obj.Name ~= "Section_Texture" and obj.BackgroundTransparency < 0.9 then
+                    if Library and Library.Theme then
+                        local c = obj.BackgroundColor3
+                        if c == Library.Theme["Window Background"] or c == Library.Theme["Inline"] or c == Library.Theme["Section Background"] or c == Library.Theme["Dark Liner"] then
+                            obj.BackgroundTransparency = trans
+                        end
+                    end
+                end
+            end
+            -- Apply to Window Outline as well
+            if Holder.Instance:FindFirstChild("\0") then
+                Holder.Instance:FindFirstChild("\0").BackgroundTransparency = trans
+            end
+        end
+    end
+
             local TooltipText = Instances:Create("TextLabel", {
                 Parent = Tooltip.Instance,
                 BackgroundColor3 = FromRGB(0, 0, 0),
@@ -1076,7 +1098,15 @@ local Library do
         for _, Item in self.ThemeItems do
             for Property, Value in Item.Properties do
                 if type(Value) == "string" and Value == Theme then
-                    Item.Item[Property] = Color
+                    if Item.Item:IsA("UIGradient") and Property == "Color" then
+                        Item.Item[Property] = ColorSequence.new({
+                            ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
+                            ColorSequenceKeypoint.new(0.5, Color),
+                            ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
+                        })
+                    else
+                        Item.Item[Property] = Color
+                    end
                 end
             end
         end
@@ -4255,7 +4285,7 @@ local Library do
         }
 
         local Items = Components.Window({
-            Position = UDim2New(0, Camera.ViewportSize.X / 4, 0, Camera.ViewportSize.Y / 3),
+            Position = UDim2New(0.5, -(Window.Size.X.Offset / 2), 0.5, -(Window.Size.Y.Offset / 2)),
             Size = Window.Size,
             Parent = self.Holder,
             Draggable = true
@@ -4297,12 +4327,14 @@ local Library do
                 local UIGradient = Instances:Create("UIGradient", {
                     Parent = Items["Text"].Instance,
                     Rotation = 0,
-                    Color = RGBSequence{
-                        RGBSequenceKeypoint(0, Window.GradientTitle.Start),
-                        RGBSequenceKeypoint(0.25, Window.GradientTitle.Middle),
-                        RGBSequenceKeypoint(1, Window.GradientTitle.End)
+                    Color = ColorSequence.new{
+                        ColorSequenceKeypoint.new(0.00, Window.GradientTitle.Start),
+                        ColorSequenceKeypoint.new(0.5, Window.GradientTitle.Middle),
+                        ColorSequenceKeypoint.new(1.00, Window.GradientTitle.End)
                     }
                 })
+                
+                UIGradient:AddToTheme({Color = "Accent"})
 
                 Items["Text"].Instance.TextColor3 = FromRGB(255, 255, 255)
 
