@@ -4293,7 +4293,7 @@ local Library do
         }
 
         local Items = Components.Window({
-            Position = UDim2New(0.5, -(Window.Size.X.Offset / 2), 0.5, -(Window.Size.Y.Offset / 2)),
+            Position = UDim2New(0.5, 0, 0.5, 0),
             Size = Window.Size,
             Parent = self.Holder,
             Draggable = true
